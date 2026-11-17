@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVERGREEN – Urban Plant Library & Bio-Circular Subscriptions</title>
+  <meta name="description" content="Fresh green every month, zero plant guilt. Rent curated indoor plants in smart self-watering pots with effortless 30-day rotations." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #eef3ef;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Custom scrollbar for phone container */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spinSlow 12s linear infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-4">
+
+  <!-- Mobile App Frame -->
+  <div class="w-full max-w-[410px] h-[100dvh] sm:h-[812px] bg-[#f7faf8] sm:rounded-[38px] sm:shadow-2xl sm:border-[8px] sm:border-[#183327] flex flex-col overflow-hidden relative">
+
+    <!-- Top Status / Brand Header -->
+    <header class="bg-white px-5 pt-4 pb-3 border-b border-emerald-100/80 flex items-center justify-between shrink-0 z-10">
+      <div class="flex items-center gap-2.5">
+        <!-- EVERGREEN Infinity Sprout Logo -->
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center shadow-sm text-white">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 13V6" />
+            <path d="M12 7c2.5-3 6-2 6 1s-3.5 3-6 1" />
+            <path d="M12 9c-2.5-3-6-2-6 1s3.5 3 6 1" />
+            <path d="M18.178 14c5.096 0 5.096 6 0 6-5.095 0-7.133-6-12.739-6-4.585 0-4.585 6 0 6 5.606 0 7.644-6 12.74-6z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-extrabold text-[17px] tracking-tight text-[#143024]">EVERGREEN</h1>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Beta</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium">Urban Plant Library</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher Pill (B2B vs B2C) -->
+      <button onclick="toggleAccountMode()" id="modeToggleBtn" class="text-[11px] font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition flex items-center gap-1">
+        <span id="modeIcon">🏢</span>
+        <span id="modeLabel">B2B Office</span>
+      </button>
+    </header>
+
+    <!-- Main Scrollable Viewport -->
+    <main class="flex-1 overflow-y-auto no-scrollbar pb-24">
+
+      <!-- TAB 1: MY FOREST (Dashboard, Smart Pots & Keep/Swap Controls) -->
+      <section id="tab-forest" class="p-5 space-y-4">
+        <!-- Greeting & Subscription Card -->
+        <div class="bg-gradient-to-br from-[#163b2b] via-[#1e523b] to-[#286b4d] rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
+          <div class="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-white/10 blur-xl"></div>
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-emerald-200 text-xs font-medium" id="greetingSub">Good morning, Quỳnh 👋</p>
+              <h2 class="text-xl font-extrabold mt-0.5" id="planTitle">Office Plan: 15 Pots</h2>
+            </div>
+            <span class="bg-white/20 backdrop-blur-sm text-[11px] font-semibold px-2.5 py-1 rounded-full">
+              Active Loop
+            </span>
+          </div>
+
+          <!-- Water & Next Swap Strip -->
+          <div class="grid grid-cols-2 gap-2.5 mt-4 pt-3.5 border-t border-white/15">
+            <div class="bg-white/10 rounded-2xl p-2.5">
+              <p class="text-[10px] text-emerald-200 uppercase font-semibold">Self-Watering Pot</p>
+              <p class="text-xs font-bold mt-0.5 flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-300 inline-block"></span>
+                Full (Refill in 5d)
+              </p>
+            </div>
+            <div class="bg-white/10 rounded-2xl p-2.5">
+              <p class="text-[10px] text-emerald-200 uppercase font-semibold">Next Monthly Swap</p>
+              <p class="text-xs font-bold mt-0.5" id="nextSwapText">In 6 Days • Free</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plant List Header -->
+        <div class="flex items-center justify-between pt-1">
+          <div>
+            <h3 class="font-bold text-sm text-slate-800">Active Plants in Your Space</h3>
+            <p class="text-[11px] text-slate-500">Toggle "Keep 1 mo" if you love a plant!</p>
+          </div>
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full" id="swapCounterBadge">
+            3 to Swap
+          </span>
+        </div>
+
+        <!-- Interactive Plant Cards -->
+        <div id="plantListContainer" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Primary Action Button -->
+        <button onclick="openSwapModal()" class="w-full py-3.5 px-4 rounded-2xl bg-[#163b2b] hover:bg-[#1f523c] active:scale-[0.99] text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+          <span>🔄 Confirm Monthly Rotation</span>
+        </button>
+      </section>
+
+      <!-- TAB 2: CHOOSE VIBE (Smart Onboarding - Lighting, Humidity & Packages) -->
+      <section id="tab-vibe" class="p-5 space-y-4 hidden">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Step 1: Smart Onboarding</span>
+          <h2 class="text-lg font-extrabold text-slate-800">Match Plants to Your Space</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Adjust room conditions—our AI curates resilient plants that thrive.</p>
+        </div>
+
+        <!-- Space Condition Sliders -->
+        <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 space-y-4">
+          <div>
+            <div class="flex justify-between text-xs font-bold mb-1.5">
+              <span class="text-slate-700">☀️ Room Light Level</span>
+              <span class="text-emerald-700" id="lightLabel">Medium (AC Office)</span>
+            </div>
+            <input type="range" min="1" max="3" value="2" id="lightSlider" oninput="updateVibeRecommendations()" class="w-full accent-emerald-600 cursor-pointer" />
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>Low / Shady</span>
+              <span>Bright Indirect</span>
+              <span>Direct Sun</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-xs font-bold text-slate-700 mb-2">✨ Aesthetic Vibe</p>
+            <div class="grid grid-cols-3 gap-2" id="vibeSelector">
+              <button onclick="selectVibe('Focus', this)" class="vibe-btn py-2 px-2 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-50 text-emerald-800">
+                💼 Focus
+              </button>
+              <button onclick="selectVibe('Zen', this)" class="vibe-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-600">
+                🧘 Zen
+              </button>
+              <button onclick="selectVibe('Air', this)" class="vibe-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-600">
+                🍃 Air Purify
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended Set -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-sm text-slate-800">Recommended Smart Set</h3>
+            <span class="text-[11px] font-semibold text-emerald-700" id="packagePriceTag">B2B: 499k/mo</span>
+          </div>
+          <div id="vibeResultCard" class="bg-white rounded-3xl p-4 shadow-sm border border-emerald-100 space-y-3">
+            <!-- Dynamic content -->
+          </div>
+        </div>
+
+        <!-- Add-on Highlight (Plant ER & Branded Pots) -->
+        <div class="bg-amber-50/90 border border-amber-200/80 rounded-2xl p-3.5 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-extrabold text-amber-900">🚑 Need "Plant ER" Rescue?</p>
+            <p class="text-[11px] text-amber-800/80">Send dying office plants to our Green Hub.</p>
+          </div>
+          <button onclick="showToast('Plant ER pickup added to your next visit!')" class="px-3 py-1.5 rounded-xl bg-amber-600 text-white text-xs font-bold shadow-sm hover:bg-amber-700">
+            + Add
+          </button>
+        </div>
+      </section>
+
+      <!-- TAB 3: CIRCULAR LOOP (The Green Hub & Recovery Station Simulation) -->
+      <section id="tab-loop" class="p-5 space-y-4 hidden">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Zero Botanical Waste</span>
+          <h2 class="text-lg font-extrabold text-slate-800">The Bio-Circular Loop</h2>
+          <p class="text-xs text-slate-500 mt-0.5">"They don't die; they just go on vacation."</p>
+        </div>
+
+        <!-- Interactive Simulation Box -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 text-center space-y-4">
+          <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border-2 border-dashed border-emerald-400 animate-spin-slow"></div>
+            <div id="simEmoji" class="text-4xl animate-float">🌿</div>
+          </div>
+
+          <div>
+            <span id="simStepBadge" class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+              Day 1 – 29: Thriving at Office
+            </span>
+            <h3 id="simTitle" class="font-extrabold text-base text-slate-800 mt-2">Fresh & Lush in Self-Watering Pot</h3>
+            <p id="simDesc" class="text-xs text-slate-500 mt-1 leading-relaxed">
+              Your team only tops up water once a week. Zero messy soil, zero plant stress.
+            </p>
+          </div>
+
+          <button onclick="advanceLoopSimulation()" class="w-full py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition">
+            ▶ Simulate Next Stage in Loop
+          </button>
+        </div>
+
+        <!-- Impact Metrics -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm">
+            <p class="text-[11px] text-slate-400 font-semibold">Plants Saved</p>
+            <p class="text-lg font-extrabold text-emerald-700 mt-0.5">18 Pots</p>
+            <p class="text-[10px] text-slate-500">Rehabilitated at Green Hub</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm">
+            <p class="text-[11px] text-slate-400 font-semibold">Budget Saved</p>
+            <p class="text-lg font-extrabold text-emerald-700 mt-0.5">~62%</p>
+            <p class="text-[10px] text-slate-500">Vs. buying & replacing</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-white/95 backdrop-blur-md border-t border-slate-100 px-4 py-2.5 flex justify-around items-center shrink-0 z-10">
+      <button onclick="switchTab('forest')" id="nav-forest" class="nav-btn flex flex-col items-center gap-1 text-emerald-700 font-bold">
+        <span class="text-lg leading-none">🪴</span>
+        <span class="text-[11px]">My Forest</span>
+      </button>
+      <button onclick="switchTab('vibe')" id="nav-vibe" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-medium hover:text-slate-600">
+        <span class="text-lg leading-none">✨</span>
+        <span class="text-[11px]">Choose Vibe</span>
+      </button>
+      <button onclick="switchTab('loop')" id="nav-loop" class="nav-btn flex flex-col items-center gap-1 text-slate-400 font-medium hover:text-slate-600">
+        <span class="text-lg leading-none">♻️</span>
+        <span class="text-[11px]">Circular Loop</span>
+      </button>
+    </nav>
+
+    <!-- Swap Confirmation Modal -->
+    <div id="swapModal" class="hidden absolute inset-0 bg-slate-900/50 backdrop-blur-xs z-30 flex items-end sm:items-center justify-center p-4">
+      <div class="bg-white w-full rounded-3xl p-5 space-y-4 shadow-xl animate-fade-in">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">Rotation Scheduled</span>
+          <button onclick="closeSwapModal()" class="text-slate-400 hover:text-slate-700 font-bold text-sm">✕</button>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-800">Your Green Refresh is Ready!</h3>
+        <p class="text-xs text-slate-600 leading-relaxed" id="modalSummaryText">
+          Our EVERGREEN team will swap 3 pots and take tired plants back to The Green Hub for recovery.
+        </p>
+        <div class="bg-emerald-50 rounded-2xl p-3 text-xs text-emerald-900 font-medium space-y-1">
+          <p>📅 <strong>Date:</strong> Friday, 10:00 AM</p>
+          <p>💧 <strong>Includes:</strong> Free self-watering pot sanitization</p>
+        </div>
+        <button onclick="closeSwapModal(); showToast('Monthly swap confirmed!')" class="w-full py-3 rounded-2xl bg-[#163b2b] text-white font-bold text-sm">
+          Done
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden absolute top-16 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg z-40 whitespace-nowrap">
+      Action updated!
+    </div>
+
+  </div>
+
+  <script>
+    // State Data
+    let isB2B = true;
+    let currentVibe = 'Focus';
+    let simStage = 0;
+
+    const plants = [
+      { id: 1, name: 'Monstera Deliciosa', zone: 'Reception Desk', emoji: '🌿', health: '98% Lush', keep: false },
+      { id: 2, name: 'ZZ Plant (Kim Tiền)', zone: 'Boss Corner (Feng Shui)', emoji: '🪴', health: 'Needs Spa Soon', keep: false },
+      { id: 3, name: 'Snake Plant (Lưỡi Hổ)', zone: 'Accounting Desk', emoji: '🌵', health: '100% Thriving', keep: true }
+    ];
+
+    const simStages = [
+      {
+        emoji: '🌿',
+        badge: 'Stage 1: Thriving at Office',
+        title: 'Fresh & Lush in Self-Watering Pot',
+        desc: 'Delivered clean with lightweight coco-peat soil. Your team only refills water once a week.'
+      },
+      {
+        emoji: '🍂',
+        badge: 'Stage 2: Day 30 Rotation',
+        title: 'Tired Plants Collected Automatically',
+        desc: 'Before leaves turn yellow, our team swaps in a brand-new set—giving your office an instant makeover.'
+      },
+      {
+        emoji: '🏥',
+        badge: 'Stage 3: The Green Hub Recovery',
+        title: 'On a "Spa Vacation" at Our Nursery',
+        desc: 'Biologists prune, fertilize, and nurse the plant back to 100% health before it re-enters the loop.'
+      }
+    ];
+
+    // Render Plant Cards in Tab 1
+    function renderPlants() {
+      const container = document.getElementById('plantListContainer');
+      container.innerHTML = '';
+      let swapCount = 0;
+
+      plants.forEach(plant => {
+        if (!plant.keep) swapCount++;
+        const card = document.createElement('div');
+        card.className = 'bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between';
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl">
+              ${plant.emoji}
+            </div>
+            <div>
+              <h4 class="font-bold text-xs text-slate-800">${plant.name}</h4>
+              <p class="text-[11px] text-slate-500">${plant.zone}</p>
+              <span class="inline-block mt-0.5 text-[10px] font-semibold ${plant.keep ? 'text-amber-700' : 'text-emerald-600'}">
+                ${plant.keep ? '★ Kept for +1 Month' : '🔄 Scheduled for Swap'}
+              </span>
+            </div>
+          </div>
+          <button onclick="toggleKeepPlant(${plant.id})" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold border transition ${
+            plant.keep
+              ? 'bg-amber-100 border-amber-300 text-amber-900'
+              : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-emerald-50 hover:text-emerald-800'
+          }">
+            ${plant.keep ? 'Kept ✓' : 'Keep 1 mo'}
+          </button>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('swapCounterBadge').textContent = `${swapCount} to Swap`;
+    }
+
+    function toggleKeepPlant(id) {
+      const target = plants.find(p => p.id === id);
+      if (target) {
+        target.keep = !target.keep;
+        renderPlants();
+        showToast(target.keep ? `Kept ${target.name} for another month!` : `${target.name} added back to swap list`);
+      }
+    }
+
+    // Switch B2B / B2C Mode
+    function toggleAccountMode() {
+      isB2B = !isB2B;
+      document.getElementById('modeIcon').textContent = isB2B ? '🏢' : '🏠';
+      document.getElementById('modeLabel').textContent = isB2B ? 'B2B Office' : 'B2C Home';
+      document.getElementById('greetingSub').textContent = isB2B ? 'Good morning, Quỳnh 👋' : 'Welcome home, Linh 👋';
+      document.getElementById('planTitle').textContent = isB2B ? 'Office Plan: 15 Pots' : 'Home Green: 3 Pots';
+      document.getElementById('packagePriceTag').textContent = isB2B ? 'B2B: 499k/mo' : 'B2C: 149k/mo';
+      updateVibeRecommendations();
+      showToast(`Switched to ${isB2B ? 'B2B Office' : 'B2C Home'} view`);
+    }
+
+    // Tab Navigation
+    function switchTab(tabName) {
+      ['forest', 'vibe', 'loop'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const nav = document.getElementById(`nav-${t}`);
+        nav.classList.remove('text-emerald-700', 'font-bold');
+        nav.classList.add('text-slate-400', 'font-medium');
+      });
+
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      const activeNav = document.getElementById(`nav-${tabName}`);
+      activeNav.classList.remove('text-slate-400', 'font-medium');
+      activeNav.classList.add('text-emerald-700', 'font-bold');
+    }
+
+    // Vibe & Light Recommendations
+    function selectVibe(vibe, btnEl) {
+      currentVibe = vibe;
+      document.querySelectorAll('.vibe-btn').forEach(b => {
+        b.className = 'vibe-btn py-2 px-2 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-600';
+      });
+      btnEl.className = 'vibe-btn py-2 px-2 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-50 text-emerald-800';
+      updateVibeRecommendations();
+    }
+
+    function updateVibeRecommendations() {
+      const lightVal = document.getElementById('lightSlider').value;
+      const labels = { '1': 'Low Light (Hallway)', '2': 'Medium (AC Office)', '3': 'Bright Window' };
+      document.getElementById('lightLabel').textContent = labels[lightVal];
+
+      const recData = {
+        Focus: { plants: 'ZZ Plant, Snake Plant & Mini Monstera', benefit: 'Boosts productivity by 15% & survives AC rooms.' },
+        Zen: { plants: 'Peace Lily, Calathea & Boston Fern', benefit: 'Soft foliage creates a calm, stress-free corner.' },
+        Air: { plants: 'Areca Palm, Rubber Plant & Pothos', benefit: 'Filters indoor toxins and balances humidity.' }
+      };
+
+      const item = recData[currentVibe];
+      document.getElementById('vibeResultCard').innerHTML = `
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">${currentVibe} Set • ${labels[lightVal]}</span>
+            <h4 class="font-extrabold text-sm text-slate-800 mt-1.5">${item.plants}</h4>
+            <p class="text-xs text-slate-500 mt-1">${item.benefit}</p>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+          <span class="text-slate-500">💧 Smart Self-Watering Pot Included</span>
+          <button onclick="showToast('Set applied to next rotation!')" class="font-bold text-emerald-700 hover:underline">Select Set →</button>
+        </div>
+      `;
+    }
+
+    // Circular Loop Simulation
+    function advanceLoopSimulation() {
+      simStage = (simStage + 1) % simStages.length;
+      const s = simStages[simStage];
+      document.getElementById('simEmoji').textContent = s.emoji;
+      document.getElementById('simStepBadge').textContent = s.badge;
+      document.getElementById('simTitle').textContent = s.title;
+      document.getElementById('simDesc').textContent = s.desc;
+    }
+
+    // Modal & Toast Helpers
+    function openSwapModal() {
+      const swapCount = plants.filter(p => !p.keep).length;
+      document.getElementById('modalSummaryText').textContent =
+        `Our EVERGREEN team will swap ${swapCount} pot(s) and take tired plants back to The Green Hub for recovery.`;
+      document.getElementById('swapModal').classList.remove('hidden');
+    }
+
+    function closeSwapModal() {
+      document.getElementById('swapModal').classList.add('hidden');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2400);
+    }
+
+    // Initialize
+    renderPlants();
+    updateVibeRecommendations();
+  </script>
+</body>
+</html>
